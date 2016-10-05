@@ -15,7 +15,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 """
 class Config:
 
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+    SECRET_KEY = 'hardtoguessstring'
     SSL_DISABLE = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_RECORD_QUERIES = True
@@ -23,12 +23,12 @@ class Config:
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_USERNAME = 'minhacaixadespamfeliz@gmail.com'
+    MAIL_PASSWORD = 'BFDAUXKHEQ8y'
 
     ANTISOCIAL_MAIL_SUBJECT_PREFIX = '[The Anti-Social Network]'
-    ANTISOCIAL_MAIL_SENDER = 'The Anti-Social Network Admin <thesuperantisocialnetwork@gmail.com>'
-    ANTISOCIAL_ADMIN = os.environ.get('ANTISOCIAL_ADMIN')
+    ANTISOCIAL_MAIL_SENDER = 'The Anti-Social Network Admin <minhacaixadespamfeliz@gmail.com>'
+    ANTISOCIAL_ADMIN = 'minhacaixadespamfeliz@gmail.com'
     ANTISOCIAL_POSTS_PER_PAGE = 20
     ANTISOCIAL_FOLLOWERS_PER_PAGE = 20
     ANTISOCIAL_COMMENTS_PER_PAGE = 10
