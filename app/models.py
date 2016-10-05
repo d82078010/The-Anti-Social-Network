@@ -56,7 +56,13 @@ class Follow(db.Model):
                             primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-
+"""
+    POST_LIKES class
+"""
+posts_likes_relationship = db.Table('posts_likes',
+                              db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+                              db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
+                              db.PrimaryKeyConstraint('user_id', 'post_id'))
 
 """
     ROLE Class
@@ -350,17 +356,21 @@ class User(UserMixin, db.Model):
     relationship from the User model.
 """
 
+from sqlalchemy.orm.collections import attribute_mapped_collection
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     # db .Text gives no limitation on the length
     body = db.Column(db.Text)
+    like_count = db.Column(db.Integer)
     # rich text
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
+    users_liked = db.relationship('User', secondary=posts_likes_relationship, backref='ref_users_liked')
 
     # create fake posts
     @staticmethod
@@ -387,6 +397,14 @@ class Post(db.Model):
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
+
+
+    # like
+    def like_by_user(self, user):
+        self.like_count += 1
+        self.users_liked.append(user)
+        db.session.add(self)
+        db.session.commit()
 
 
 # rich text event listener: it will automatically be invoked whenever

@@ -140,6 +140,19 @@ def post(id):
                            comments=comments, pagination=pagination)
 
 
+# like post
+@main.route('/like/<id>')
+@login_required
+def like(id):
+    post = Post.query.filter_by(id=id).first()
+    if post is None:
+        flash('Invalid post.')
+        return redirect(url_for('.index'))
+    post.like_by_user(current_user)
+    flash('You liked this post.')
+    return redirect(url_for('.post', id=id))
+
+
 # edit posts
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
