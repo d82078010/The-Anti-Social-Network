@@ -6,9 +6,9 @@ body {
     background: url('./g.png');
     background-size: 100px;
     background-repeat: no-repeat;
-    background-color: dimgray;
+    background-color: lightgray;
     background-position-x: 5%;
-    color: white;
+    color: black;
 }
 
 h1 {
@@ -37,7 +37,7 @@ ul.posts {
     padding: 0px;
     margin: 16px 0px 0px 0px;
     border-top: 1px solid #e0e0e0;
-    background-color: #999999;
+    background-color: #bbbccc;
 }
 
 ul.posts li.post {
@@ -46,7 +46,7 @@ ul.posts li.post {
 }
 
 ul.posts li.post:hover {
-    background-color: #aaaaaa;
+    background-color: #aaaccc;
 }
 
 div.post-date {
@@ -73,7 +73,7 @@ div.pagination {
     margin: 0px;
 }
 .btn {
-    background: #FF9966;
+    background: mediumseagreen;
     background-image: none;
     border: none;
     color: #fff;
@@ -131,10 +131,17 @@ div.pagination {
     border-bottom: 1px solid #e0e0e0;
 }
 
-.label-default {
-    background-color: lightskyblue;
+.label {
+    background-color: slategray;
 }
 
+.label-default {
+    background-color: #888ccc;
+}
+
+.label-danger{
+    background-color: #ff6666;
+}
 div.post-tabs {
     margin-top: 36px;
 }
@@ -157,7 +164,7 @@ ul.comments li.comment:nth-child(1) {
     border-top: 0px solid #e0e0e0;
 }
 ul.comments li.comment:hover {
-    background-color: #aaaaaa;
+    background-color: #bbbbcc;
 }
 div.comment-date {
     float: right;
@@ -180,6 +187,11 @@ div.comment-form {
 
 div.post-tabs {
     color: white;
-    background-color: #cccccc;
+    background-color: #eeeeee;
 }
+
+div.post-tabs li.active:hover{
+    background-color: white;
+}
+
 
