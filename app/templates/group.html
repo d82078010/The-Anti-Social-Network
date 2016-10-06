@@ -11,11 +11,10 @@
         <h1>{{ group.name }}</h1>
         <p>{{ group.description }}</p>
         <p><strong>Group admin</strong></p>
-        <p><a href="{{ url_for('.user', username=group.admin.username) }}"> </a> {{ group.admin.username }} </p>
-
-        <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
-
-
+        <a href="{{ url_for('.user', username=group.admin.username) }}">
+            <p>{{ group.admin.username }}</p>
+            <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
+        </a>
     </div>
 </div>
 

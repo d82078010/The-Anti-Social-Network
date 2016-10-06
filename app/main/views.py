@@ -354,7 +354,7 @@ def group(id):
                     like_count=0, # todo: isso aqui deveria ser setado como default!
                     group_id=id)
         db.session.add(post)
-        return redirect(url_for('.index'))
+        return redirect(url_for('.group', id=id))
 
     page = request.args.get('page', 1, type=int)
     pagination = Post.query.filter_by(group_id=id).order_by(Post.timestamp.desc()).paginate(
