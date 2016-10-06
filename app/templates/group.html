@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+        <h1>{{ group.name }}</h1>
+        <p>{{ group.description }}</p>
+        <p><strong>Group admin</strong></p>
+        <p>
+            <p>
+            <a href="{{ url_for('.user', username=group.admin.username) }}"> <img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=40) }}">
+            </a> {{ group.admin.name }}
+            </p>
+        </p>
+    </div>
+</div>
+{% endblock %}

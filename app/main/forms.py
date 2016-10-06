@@ -66,3 +66,9 @@ class PostForm(Form):
 class CommentForm(Form):
     body = StringField('Enter your comment', validators=[Required()])
     submit = SubmitField('Submit')
+
+# For create new group
+class CreateGroupForm(Form):
+    name = StringField('Group name', validators=[Length(0, 64)])
+    description = TextAreaField('Description')
+    submit = SubmitField('Submit')

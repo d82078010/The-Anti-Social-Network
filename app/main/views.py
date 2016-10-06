@@ -6,9 +6,9 @@ from flask import render_template, redirect, url_for, abort, flash, \
 request, current_app, make_response
 from flask.ext.login import login_required, current_user
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
+from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm, CreateGroupForm
 from .. import db
-from ..models import Permission, Role, User, Post, Comment
+from ..models import Permission, Role, User, Post, Comment, Group
 from ..decorators import admin_required, permission_required
 
 
@@ -302,3 +302,25 @@ def moderate_disable(id):
     db.session.add(comment)
     return redirect(url_for('.moderate',
                             page=request.args.get('page', 1, type=int)))
+
+@main.route('/creategroup', methods=['GET', 'POST'])
+@login_required
+def creategroup():
+    form = CreateGroupForm()
+    if form.validate_on_submit():
+        group = Group(name=form.name.data,
+                      description=form.description.data,
+                      admin_id=current_user.id)
+        db.session.add(group)
+        flash('Your group was created.')
+        return redirect(url_for('.group', id=1))
+    return render_template('create_group.html', form=form)
+
+
+@main.route('/group/<int:id>')
+@login_required
+def group(id):
+    group = Group.query.filter_by(id=id).first()
+    if group is None:
+            abort(404)
+    return render_template('group.html', group=group)

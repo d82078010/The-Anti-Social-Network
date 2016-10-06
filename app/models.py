@@ -130,6 +130,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    groups = db.relationship('Group', backref='admin', lazy='dynamic')
 
     # A many-to-many relationship implemented as two one to-many relationship
     # Follow instances, where each one has the follower and followed back reference
@@ -483,3 +484,14 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True))
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+
+"""
+    GROUP Class
+"""
+
+class Group(db.Model):
+    __tablename__ = 'groups'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    description = db.Column(db.Text)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
