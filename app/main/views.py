@@ -183,6 +183,20 @@ def edit(id):
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
+# delete post
+@main.route('/postdelete/<int:id>')
+@login_required
+def postdelete(id):
+    post = Post.query.filter_by(id=id)
+
+    if post.first().group is None:
+        go_to = redirect(url_for('.index'))
+    else:
+        go_to = redirect(url_for('.group', id=post.first().group_id))
+
+    post.delete()
+
+    return go_to
 
 # following stuff
 
@@ -341,3 +355,17 @@ def group(id):
     posts = pagination.items
 
     return render_template('group.html', group=group, posts=posts, pagination=pagination, form=form)
+
+
+@main.route('/listgroups/<filter>')
+@login_required
+def listgroups(filter):
+    page = request.args.get('page', 1, type=int)
+
+    pagination = Group.query.paginate(
+        page, per_page=current_app.config['ANTISOCIAL_POSTS_PER_PAGE'],
+        error_out=False)
+    groups = pagination.items
+
+    return render_template('listgroups.html', groups=groups,
+                           pagination=pagination)
