@@ -505,13 +505,14 @@ class Group(db.Model):
     name = db.Column(db.Text)
     description = db.Column(db.Text)
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    public = db.Column(db.Boolean)
     posts = db.relationship('Post', backref='group', lazy='dynamic')
 
     users_joined = db.relationship('User', secondary=user_group_relationship, backref='ref_users_joined')
 
     # join functions
     def user_join(self, user):
-        if not self.has_already_like(user):
+        if not self.has_already_join(user):
             self.users_joined.append(user)
             db.session.add(self)
             db.session.commit()

@@ -326,6 +326,7 @@ def creategroup():
     if form.validate_on_submit():
         group = Group(name=form.name.data,
                       description=form.description.data,
+                      public=form.public.data,
                       admin_id=current_user.id)
 
         db.session.add(group)
@@ -350,11 +351,14 @@ def group(id):
 
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.body.data,
-                    author=current_user._get_current_object(),
-                    like_count=0, # todo: isso aqui deveria ser setado como default!
-                    group_id=id)
-        db.session.add(post)
+        if group.has_already_join(current_user):
+            post = Post(body=form.body.data,
+                        author=current_user._get_current_object(),
+                        like_count=0, # todo: isso aqui deveria ser setado como default!
+                        group_id=id)
+            db.session.add(post)
+        else:
+            flash("You can't write post.")
         return redirect(url_for('.group', id=id))
 
     page = request.args.get('page', 1, type=int)
@@ -362,10 +366,6 @@ def group(id):
         page, per_page=current_app.config['ANTISOCIAL_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
-
-    print '----------------'
-    print group.users_joined
-    print '----------------'
 
     return render_template('group.html', group=group, posts=posts, pagination=pagination, form=form)
 
@@ -395,10 +395,22 @@ def groupdelete(id):
 @main.route('/groupjoin/<id>')
 @login_required
 def groupjoin(id):
-    pass
+    group = Group.query.filter_by(id=id).first()
+    if group is None:
+        flash('Invalid group.')
+        return redirect(url_for('.index'))
+    group.user_join(current_user)
+    flash('You join in this group.')
+    return redirect(url_for('.group', id=id))
 
 
 @main.route('/groupleave/<id>')
 @login_required
 def groupleave(id):
-    pass
+    group = Group.query.filter_by(id=id).first()
+    if group is None:
+        flash('Invalid group.')
+        return redirect(url_for('.index'))
+    group.user_leave(current_user)
+    flash('You leaved from this group.')
+    return redirect(url_for('.group', id=id))
