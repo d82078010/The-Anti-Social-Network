@@ -183,6 +183,20 @@ def edit(id):
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
+# delete post
+@main.route('/postdelete/<int:id>')
+@login_required
+def postdelete(id):
+    post = Post.query.filter_by(id=id)
+
+    if post.first().group is None:
+        go_to = redirect(url_for('.index'))
+    else:
+        go_to = redirect(url_for('.group', id=post.first().group_id))
+
+    post.delete()
+
+    return go_to
 
 # following stuff
 
