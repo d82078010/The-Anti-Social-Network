@@ -8,13 +8,27 @@
 <div class="page-header">
     <img class="img-rounded profile-thumbnail" src="{{url_for('static', filename='uploads/group_photo/' ~ group.id  ~ '.png')}}" height="256" width="256">
     <div class="profile-header">
-        <h1>{{ group.name }}</h1>
-        <p>{{ group.description }}</p>
-        <p><strong>Group admin</strong></p>
-        <a href="{{ url_for('.user', username=group.admin.username) }}">
-            <p>{{ group.admin.username }}</p>
-            <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
-        </a>
+    <h1>{{ group.name }}</h1>
+    <p>{{ group.description }}</p>
+    <div class="row">
+    <p><strong>Group admin</strong></p>
+    <a href="{{ url_for('.user', username=group.admin.username) }}">
+        <p>{{ group.admin.username }}</p>
+        <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
+    </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2">
+        {% if group.admin == current_user %}
+            <a href="{{ url_for('.groupdelete', id=group.id) }}" class="btn btn-danger">Delete group</a>
+        {% else %}
+
+        {% endif %}
+    </div>
+    <div class="col-sm-10">
+
     </div>
 </div>
 

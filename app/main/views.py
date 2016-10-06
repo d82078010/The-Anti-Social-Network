@@ -331,7 +331,8 @@ def creategroup():
         db.session.add(group)
         db.session.flush()
 
-        path = os.path.join('static/uploads/group_photo/', str(group.id) + '.png')
+        # todo: nao pode-se usar caminho absoluto!
+        path = os.path.join('/Users/brunomacabeusaquino/ApenasMeu/Dropbox (BEPiD)/CEFET/EngenhariaSoftware/The-Anti-Social-Network/app/static/uploads/group_photo/', str(group.id) + '.png')
         form.photo.data.save(path)
 
         flash('Your group was created.')
@@ -377,3 +378,11 @@ def listgroups(filter):
 
     return render_template('listgroups.html', groups=groups,
                            pagination=pagination)
+
+@main.route('/groupdelete/<int:id>')
+@login_required
+def groupdelete(id):
+    group = Group.query.filter_by(id=id)
+    group.delete()
+
+    return redirect(url_for('.index'))
