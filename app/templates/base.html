@@ -1,6 +1,6 @@
 {% extends "bootstrap/base.html" %}
 
-{% block title %}The Anti-Social Network{% endblock %}
+{% block title %}treeGroups{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -22,7 +22,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-anti brand" href="{{ url_for('main.index') }}">The Anti-Social Network</a>
+
         </div>
         <div class="navbar-collapse collapse">
 
@@ -32,7 +32,12 @@
                 <li><a href="{{ url_for('main.moderate') }}">Moderate Comments</a></li>
                 {% endif %}
 
+                <li class="navbar">
+                    <a href="{{ url_for('main.index') }}">Home</a>
+                </li>
+
                 {% if current_user.is_authenticated() %}
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!--todo: por algum ícone aqui! <img src="{{ current_user.gravatar(size=18) }}"> -->
