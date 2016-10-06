@@ -17,9 +17,15 @@
                 {% endif %}
             </div>
             <div class="post-footer">
+                {% if not post.has_already_like(current_user) %}
                 <a href="{{ url_for('.like', id=post.id) }}">
                     <span class="label label-primary">Like: {{ post.like_count }}</span>
                 </a>
+                {% else %}
+                <a href="{{ url_for('.dislike', id=post.id) }}">
+                    <span class="label label-primary">Like: {{ post.like_count }} (dislike)</span>
+                </a>
+                {% endif %}
                 {% if current_user == post.author %}
                 <a href="{{ url_for('.edit', id=post.id) }}">
                     <span class="label label-primary">Edit</span>

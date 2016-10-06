@@ -399,13 +399,31 @@ class Post(db.Model):
             tags=allowed_tags, strip=True))
 
 
-    # like
-    def like_by_user(self, user):
-        self.like_count += 1
-        self.users_liked.append(user)
-        db.session.add(self)
-        db.session.commit()
+    # like functions
+    def like_set(self, user):
+        if not self.has_already_like(user):
+            self.users_liked.append(user)
+            db.session.add(self)
+            db.session.commit()
 
+            self.like_count += 1
+
+    def like_remove(self, user):
+        l = self.has_already_like(user)
+
+        if l:
+            self.users_liked.remove(l)
+            db.session.add(self)
+            db.session.commit()
+
+            self.like_count -= 1
+
+    def has_already_like(self, user):
+        for i in self.users_liked:
+            if i.get_id() == user.get_id():
+                return i
+
+        return None
 
 # rich text event listener: it will automatically be invoked whenever
 # the body field on any instance of the class is set to a new value

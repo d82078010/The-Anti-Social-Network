@@ -148,8 +148,20 @@ def like(id):
     if post is None:
         flash('Invalid post.')
         return redirect(url_for('.index'))
-    post.like_by_user(current_user)
+    post.like_set(current_user)
     flash('You liked this post.')
+    return redirect(url_for('.post', id=id))
+
+
+@main.route('/dislike/<id>')
+@login_required
+def dislike(id):
+    post = Post.query.filter_by(id=id).first()
+    if post is None:
+        flash('Invalid post.')
+        return redirect(url_for('.index'))
+    post.like_remove(current_user)
+    flash('You disliked this post.')
     return redirect(url_for('.post', id=id))
 
 
