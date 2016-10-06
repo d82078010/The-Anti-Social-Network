@@ -511,7 +511,7 @@ class Group(db.Model):
 
     # join functions
     def user_join(self, user):
-        if not self.has_already_like(user):
+        if not self.has_already_join(user):
             self.users_joined.append(user)
             db.session.add(self)
             db.session.commit()

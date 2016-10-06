@@ -25,7 +25,7 @@
         {% if group.admin == current_user %}
             <a href="{{ url_for('.groupdelete', id=group.id) }}" class="btn btn-danger">Delete group</a>
         {% else %}
-            {% if group.has_already_join(current_user) %}
+            {% if not group.has_already_join(current_user) %}
                 <a href="{{ url_for('.groupjoin', id=group.id) }}" class="btn btn-default">Join</a>
             {% else %}
                 <a href="{{ url_for('.groupleave', id=group.id) }}" class="btn btn-default">Leave</a>
@@ -33,7 +33,13 @@
         {% endif %}
     </div>
     <div class="col-sm-10">
-
+        {% for user_join in group.users_joined %}
+            <p>
+                <a href="{{ url_for('.user', username=user_join.username) }}">
+                    <img class="img-rounded profile-thumbnail" src="{{ user_join.gravatar(size=50) }}">
+                </a>
+            </p>
+        {% endfor %}
     </div>
 </div>
 <hr>
