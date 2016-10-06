@@ -72,4 +72,5 @@ class CreateGroupForm(Form):
     name = StringField('Group name', validators=[Length(0, 64)])
     description = TextAreaField('Description')
     photo = FileField('Photo')
+    public = BooleanField('Group public?')
     submit = SubmitField('Submit')

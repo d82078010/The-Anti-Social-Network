@@ -26,7 +26,11 @@
             <a href="{{ url_for('.groupdelete', id=group.id) }}" class="btn btn-danger">Delete group</a>
         {% else %}
             {% if not group.has_already_join(current_user) %}
-                <a href="{{ url_for('.groupjoin', id=group.id) }}" class="btn btn-default">Join</a>
+                {% if group.public == True %}
+                    <a href="{{ url_for('.groupjoin', id=group.id) }}" class="btn btn-default">Join</a>
+                {% else %}
+                    Privated group
+                {% endif %}
             {% else %}
                 <a href="{{ url_for('.groupleave', id=group.id) }}" class="btn btn-default">Leave</a>
             {%  endif %}
@@ -44,7 +48,9 @@
 </div>
 <hr>
 
+{% if group.has_already_join(current_user) %}
 {{ wtf.quick_form(form) }}
+{% endif %}
 
 <h3>Posts</h3>
 {% include '_posts.html' %}

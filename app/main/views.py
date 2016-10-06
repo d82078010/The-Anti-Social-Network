@@ -326,6 +326,7 @@ def creategroup():
     if form.validate_on_submit():
         group = Group(name=form.name.data,
                       description=form.description.data,
+                      public=form.public.data,
                       admin_id=current_user.id)
 
         db.session.add(group)
@@ -350,11 +351,14 @@ def group(id):
 
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.body.data,
-                    author=current_user._get_current_object(),
-                    like_count=0, # todo: isso aqui deveria ser setado como default!
-                    group_id=id)
-        db.session.add(post)
+        if group.has_already_join(current_user):
+            post = Post(body=form.body.data,
+                        author=current_user._get_current_object(),
+                        like_count=0, # todo: isso aqui deveria ser setado como default!
+                        group_id=id)
+            db.session.add(post)
+        else:
+            flash("You can't write post.")
         return redirect(url_for('.group', id=id))
 
     page = request.args.get('page', 1, type=int)

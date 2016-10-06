@@ -505,6 +505,7 @@ class Group(db.Model):
     name = db.Column(db.Text)
     description = db.Column(db.Text)
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    public = db.Column(db.Boolean)
     posts = db.relationship('Post', backref='group', lazy='dynamic')
 
     users_joined = db.relationship('User', secondary=user_group_relationship, backref='ref_users_joined')
