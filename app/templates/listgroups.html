@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}The Anti-Social Network - Groups{% endblock %}
+
+{% block page_content %}
+
+<ul class="posts">
+    {% for group in groups %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <!-- todo: grupos precisam ter fotos!
+            <a href="">
+                <img class="img-rounded profile-thumbnail" src="">
+            </a>-->
+        </div>
+        <div class="post-content">
+            <div class="post-author">
+                <a href="{{ url_for('.group', id=group.id) }}">{{ group.name }}</a>
+                maintained by <a href="{{ url_for('.user', username=group.admin.username) }}">{{ group.admin.name }}</a>
+            </div>
+            <div class="post-body">
+                {{ group.description }}
+            </div>
+            <div class="post-footer">
+
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.listgroups', filter='all') }}
+</div>
+{% endif %}
+{% endblock %}

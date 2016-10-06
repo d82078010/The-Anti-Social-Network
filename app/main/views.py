@@ -341,3 +341,17 @@ def group(id):
     posts = pagination.items
 
     return render_template('group.html', group=group, posts=posts, pagination=pagination, form=form)
+
+
+@main.route('/listgroups/<filter>')
+@login_required
+def listgroups(filter):
+    page = request.args.get('page', 1, type=int)
+
+    pagination = Group.query.paginate(
+        page, per_page=current_app.config['ANTISOCIAL_POSTS_PER_PAGE'],
+        error_out=False)
+    groups = pagination.items
+
+    return render_template('listgroups.html', groups=groups,
+                           pagination=pagination)
