@@ -17,6 +17,7 @@
         <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
     </a>
     </div>
+    </div>
 </div>
 
 <div class="row">
@@ -24,13 +25,18 @@
         {% if group.admin == current_user %}
             <a href="{{ url_for('.groupdelete', id=group.id) }}" class="btn btn-danger">Delete group</a>
         {% else %}
-
+            {% if group.has_already_join(current_user) %}
+                <a href="{{ url_for('.groupjoin', id=group.id) }}" class="btn btn-default">Join</a>
+            {% else %}
+                <a href="{{ url_for('.groupleave', id=group.id) }}" class="btn btn-default">Leave</a>
+            {%  endif %}
         {% endif %}
     </div>
     <div class="col-sm-10">
 
     </div>
 </div>
+<hr>
 
 {{ wtf.quick_form(form) }}
 

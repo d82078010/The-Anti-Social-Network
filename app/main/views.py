@@ -363,6 +363,10 @@ def group(id):
         error_out=False)
     posts = pagination.items
 
+    print '----------------'
+    print group.users_joined
+    print '----------------'
+
     return render_template('group.html', group=group, posts=posts, pagination=pagination, form=form)
 
 
@@ -386,3 +390,15 @@ def groupdelete(id):
     group.delete()
 
     return redirect(url_for('.index'))
+
+# like post
+@main.route('/groupjoin/<id>')
+@login_required
+def groupjoin(id):
+    pass
+
+
+@main.route('/groupleave/<id>')
+@login_required
+def groupleave(id):
+    pass

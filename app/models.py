@@ -64,6 +64,15 @@ posts_likes_relationship = db.Table('posts_likes',
                               db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
                               db.PrimaryKeyConstraint('user_id', 'post_id'))
 
+
+"""
+    USER_GROUP class
+"""
+user_group_relationship = db.Table('users_groups',
+                              db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+                              db.Column('group_id', db.Integer, db.ForeignKey('groups.id'), nullable=False),
+                              db.PrimaryKeyConstraint('user_id', 'group_id'))
+
 """
     ROLE Class
 """
@@ -497,3 +506,27 @@ class Group(db.Model):
     description = db.Column(db.Text)
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     posts = db.relationship('Post', backref='group', lazy='dynamic')
+
+    users_joined = db.relationship('User', secondary=user_group_relationship, backref='ref_users_joined')
+
+    # join functions
+    def user_join(self, user):
+        if not self.has_already_like(user):
+            self.users_joined.append(user)
+            db.session.add(self)
+            db.session.commit()
+
+
+    def user_leave(self, user):
+        l = self.has_already_join(user)
+
+        if l:
+            self.users_joined.remove(l)
+            db.session.add(self)
+            db.session.commit()
+
+
+    def has_already_join(self, user):
+        for i in self.users_joined:
+            if i.get_id() == user.get_id():
+                return i
