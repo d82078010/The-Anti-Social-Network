@@ -6,6 +6,7 @@
 
 {% block page_content %}
 <div class="page-header">
+    <img class="img-rounded profile-thumbnail" src="{{url_for('static', filename='uploads/group_photo/' ~ group.id  ~ '.png')}}" height="256" width="256">
     <div class="profile-header">
         <h1>{{ group.name }}</h1>
         <p>{{ group.description }}</p>

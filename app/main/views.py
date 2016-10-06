@@ -3,13 +3,14 @@
 """
 
 from flask import render_template, redirect, url_for, abort, flash, \
-request, current_app, make_response
+request, current_app, make_response, send_from_directory
 from flask.ext.login import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm, CreateGroupForm
 from .. import db
 from ..models import Permission, Role, User, Post, Comment, Group
 from ..decorators import admin_required, permission_required
+import os
 
 
 
@@ -326,9 +327,16 @@ def creategroup():
         group = Group(name=form.name.data,
                       description=form.description.data,
                       admin_id=current_user.id)
+
         db.session.add(group)
+        db.session.flush()
+
+        path = os.path.join('static/uploads/group_photo/', str(group.id) + '.png')
+        form.photo.data.save(path)
+
         flash('Your group was created.')
-        return redirect(url_for('.group', id=1))
+        return redirect(url_for('.group', id=group.id))
+
     return render_template('create_group.html', form=form)
 
 

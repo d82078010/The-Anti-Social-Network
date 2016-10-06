@@ -9,10 +9,9 @@
     {% for group in groups %}
     <li class="post">
         <div class="post-thumbnail">
-            <!-- todo: grupos precisam ter fotos!
             <a href="">
-                <img class="img-rounded profile-thumbnail" src="">
-            </a>-->
+                <img class="img-rounded profile-thumbnail" src="{{url_for('static', filename='uploads/group_photo/' ~ group.id  ~ '.png')}}" height="40" width="40">
+            </a>
         </div>
         <div class="post-content">
             <div class="post-author">

@@ -4,7 +4,7 @@
 
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
+    SubmitField, FileField
 from wtforms.validators import Required, Length, Email, Regexp
 from flask.ext.pagedown.fields import PageDownField
 from wtforms import ValidationError
@@ -71,4 +71,5 @@ class CommentForm(Form):
 class CreateGroupForm(Form):
     name = StringField('Group name', validators=[Length(0, 64)])
     description = TextAreaField('Description')
+    photo = FileField('Photo')
     submit = SubmitField('Submit')
