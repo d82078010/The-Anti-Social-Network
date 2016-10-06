@@ -369,6 +369,7 @@ class Post(db.Model):
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
     users_liked = db.relationship('User', secondary=posts_likes_relationship, backref='ref_users_liked')
@@ -495,3 +496,4 @@ class Group(db.Model):
     name = db.Column(db.Text)
     description = db.Column(db.Text)
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    posts = db.relationship('Post', backref='group', lazy='dynamic')

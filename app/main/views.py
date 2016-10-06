@@ -19,6 +19,7 @@ def index():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.body.data,
+                    like_count=0,  # todo: isso aqui deveria ser setado como default!
                     author=current_user._get_current_object())
         db.session.add(post)
         return redirect(url_for('.index'))
@@ -317,10 +318,26 @@ def creategroup():
     return render_template('create_group.html', form=form)
 
 
-@main.route('/group/<int:id>')
+@main.route('/group/<int:id>', methods=['GET', 'POST'])
 @login_required
 def group(id):
     group = Group.query.filter_by(id=id).first()
     if group is None:
             abort(404)
-    return render_template('group.html', group=group)
+
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object(),
+                    like_count=0, # todo: isso aqui deveria ser setado como default!
+                    group_id=id)
+        db.session.add(post)
+        return redirect(url_for('.index'))
+
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.filter_by(group_id=id).order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['ANTISOCIAL_POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+
+    return render_template('group.html', group=group, posts=posts, pagination=pagination, form=form)

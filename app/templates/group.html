@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
 
 {% block title %}{{ group.name }}{% endblock %}
@@ -17,4 +18,15 @@
         </p>
     </div>
 </div>
+
+{{ wtf.quick_form(form) }}
+
+<h3>Posts</h3>
+{% include '_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.group', id=group.id) }}
+</div>
+{% endif %}
+
 {% endblock %}
