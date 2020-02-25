@@ -4,20 +4,27 @@ body {
     font-size: 18px;
     line-height: 25px;
     background: url('./g.png');
+    background-size: 100px;
     background-repeat: no-repeat;
+    background-color: lightgray;
+    background-position-x: 5%;
+    color: black;
 }
+
 h1 {
     font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
     font-size: 300%;
     line-height: 65px;
     text-align: right;
 }
+
 h5 {
     font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
     font-size: 50%;
     text-align: center;
     color: red;
 }
+
 .profile-thumbnail {
     position: absolute;
 }
@@ -30,19 +37,24 @@ ul.posts {
     padding: 0px;
     margin: 16px 0px 0px 0px;
     border-top: 1px solid #e0e0e0;
+    background-color: #bbbccc;
 }
+
 ul.posts li.post {
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;
 }
+
 ul.posts li.post:hover {
-    background-color: #f0f0f0;
+    background-color: #aaaccc;
 }
+
 div.post-date {
     float: right;
 }
 div.post-author {
     font-weight: bold;
+    color: yellow;
 }
 div.post-thumbnail {
     position: absolute;
@@ -61,7 +73,7 @@ div.pagination {
     margin: 0px;
 }
 .btn {
-    background: #FF9966;
+    background: mediumseagreen;
     background-image: none;
     border: none;
     color: #fff;
@@ -74,9 +86,10 @@ div.pagination {
     -webkit-transition: all 0.3s ease-in-out 0s;
 }
 .btn:hover {
-    background: #333;
-    color: #fff;
+    background: #fff;
+    color: #000;
 }
+
 .navbar-anti .navbar-inner {
     background: #f36c00;
     background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f68a28), color-stop(100%, #f36c00));
@@ -92,23 +105,45 @@ div.pagination {
     padding-top: 30px;
     padding-bottom: 30px;
 }
+
+.navbar{
+    font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+    text-align: center;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
 .dropdown-toggle {
     font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
 }
 .post-body h1 {
     font-size: 140%;
+
 }
 .post-body h2 {
     font-size: 130%;
+
 }
 .post-body h3 {
     font-size: 120%;
 }
+
 .table.followers tr {
     border-bottom: 1px solid #e0e0e0;
 }
+
+.label {
+    background-color: slategray;
+}
+
+.label-default {
+    background-color: #888ccc;
+}
+
+.label-danger{
+    background-color: #ff6666;
+}
 div.post-tabs {
-    margin-top: 16px;
+    margin-top: 36px;
 }
 div.post-tabs ul.posts {
     margin: 0px;
@@ -118,7 +153,7 @@ ul.comments {
     list-style-type: none;
     padding: 0px;
     margin: 16px 0px 0px 0px;
-    bborder-top: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
 }
 ul.comments li.comment {
     margin-left: 32px;
@@ -126,10 +161,10 @@ ul.comments li.comment {
     border-bottom: 1px solid #e0e0e0;
 }
 ul.comments li.comment:nth-child(1) {
-    border-top: 1px solid #e0e0e0;
+    border-top: 0px solid #e0e0e0;
 }
 ul.comments li.comment:hover {
-    background-color: #f0f0f0;
+    background-color: #bbbbcc;
 }
 div.comment-date {
     float: right;
@@ -137,6 +172,7 @@ div.comment-date {
 div.comment-author {
     font-weight: bold;
 }
+
 div.comment-thumbnail {
     position: absolute;
 }
@@ -144,6 +180,18 @@ div.comment-content {
     margin-left: 48px;
     min-height: 48px;
 }
+
 div.comment-form {
     margin: 16px 0px 16px 32px;
 }
+
+div.post-tabs {
+    color: white;
+    background-color: #eeeeee;
+}
+
+div.post-tabs li.active:hover{
+    background-color: white;
+}
+
+

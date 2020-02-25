@@ -4,7 +4,7 @@
 
 from flask.ext.wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
+    SubmitField, FileField
 from wtforms.validators import Required, Length, Email, Regexp
 from flask.ext.pagedown.fields import PageDownField
 from wtforms import ValidationError
@@ -65,4 +65,12 @@ class PostForm(Form):
 # For comments in posts
 class CommentForm(Form):
     body = StringField('Enter your comment', validators=[Required()])
+    submit = SubmitField('Submit')
+
+# For create new group
+class CreateGroupForm(Form):
+    name = StringField('Group name', validators=[Length(0, 64)])
+    description = TextAreaField('Description')
+    photo = FileField('Photo')
+    public = BooleanField('Group public?')
     submit = SubmitField('Submit')

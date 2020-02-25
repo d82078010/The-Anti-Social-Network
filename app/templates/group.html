@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <img class="img-rounded profile-thumbnail" src="{{url_for('static', filename='uploads/group_photo/' ~ group.id  ~ '.png')}}" height="256" width="256">
+    <div class="profile-header">
+    <h1>{{ group.name }}</h1>
+    <p>{{ group.description }}</p>
+    <div class="row">
+    <p><strong>Group admin</strong></p>
+    <a href="{{ url_for('.user', username=group.admin.username) }}">
+        <p>{{ group.admin.username }}</p>
+        <p><img class="img-rounded profile-thumbnail" src="{{ group.admin.gravatar(size=50) }}"></p>
+    </a>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2">
+        {% if group.admin == current_user %}
+            <a href="{{ url_for('.groupdelete', id=group.id) }}" class="btn btn-danger">Delete group</a>
+        {% else %}
+            {% if not group.has_already_join(current_user) %}
+                {% if group.public == True %}
+                    <a href="{{ url_for('.groupjoin', id=group.id) }}" class="btn btn-default">Join</a>
+                {% else %}
+                    Privated group
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('.groupleave', id=group.id) }}" class="btn btn-default">Leave</a>
+            {%  endif %}
+        {% endif %}
+    </div>
+    <div class="col-sm-10">
+        {% for user_join in group.users_joined %}
+            <p>
+                <a href="{{ url_for('.user', username=user_join.username) }}">
+                    <img class="img-rounded profile-thumbnail" src="{{ user_join.gravatar(size=50) }}">
+                </a>
+            </p>
+        {% endfor %}
+    </div>
+</div>
+<hr>
+
+{% if group.has_already_join(current_user) %}
+{{ wtf.quick_form(form) }}
+{% endif %}
+
+<h3>Posts</h3>
+{% include '_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.group', id=group.id) }}
+</div>
+{% endif %}
+
+{% endblock %}

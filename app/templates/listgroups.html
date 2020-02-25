@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}treeGroups - Groups{% endblock %}
+
+{% block page_content %}
+
+<ul class="posts">
+    {% for group in groups %}
+    <li class="post">
+        <div class="post-thumbnail">
+            <a href="">
+                <img class="img-rounded profile-thumbnail" src="{{url_for('static', filename='uploads/group_photo/' ~ group.id  ~ '.png')}}" height="40" width="40">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-author">
+                <a href="{{ url_for('.group', id=group.id) }}">{{ group.name }}</a>
+                maintained by <a href="{{ url_for('.user', username=group.admin.username) }}">{{ group.admin.name }}</a>
+            </div>
+            <div class="post-body">
+                {{ group.description }}
+            </div>
+            <div class="post-footer">
+
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.listgroups', filter='all') }}
+</div>
+{% endif %}
+{% endblock %}

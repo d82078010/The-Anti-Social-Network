@@ -56,7 +56,22 @@ class Follow(db.Model):
                             primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+"""
+    POST_LIKES class
+"""
+posts_likes_relationship = db.Table('posts_likes',
+                              db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+                              db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), nullable=False),
+                              db.PrimaryKeyConstraint('user_id', 'post_id'))
 
+
+"""
+    USER_GROUP class
+"""
+user_group_relationship = db.Table('users_groups',
+                              db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+                              db.Column('group_id', db.Integer, db.ForeignKey('groups.id'), nullable=False),
+                              db.PrimaryKeyConstraint('user_id', 'group_id'))
 
 """
     ROLE Class
@@ -124,6 +139,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    groups = db.relationship('Group', backref='admin', lazy='dynamic')
 
     # A many-to-many relationship implemented as two one to-many relationship
     # Follow instances, where each one has the follower and followed back reference
@@ -350,17 +366,22 @@ class User(UserMixin, db.Model):
     relationship from the User model.
 """
 
+from sqlalchemy.orm.collections import attribute_mapped_collection
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     # db .Text gives no limitation on the length
     body = db.Column(db.Text)
+    like_count = db.Column(db.Integer)
     # rich text
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
+    users_liked = db.relationship('User', secondary=posts_likes_relationship, backref='ref_users_liked')
 
     # create fake posts
     @staticmethod
@@ -388,6 +409,32 @@ class Post(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
 
+
+    # like functions
+    def like_set(self, user):
+        if not self.has_already_like(user):
+            self.users_liked.append(user)
+            db.session.add(self)
+            db.session.commit()
+
+            self.like_count += 1
+
+    def like_remove(self, user):
+        l = self.has_already_like(user)
+
+        if l:
+            self.users_liked.remove(l)
+            db.session.add(self)
+            db.session.commit()
+
+            self.like_count -= 1
+
+    def has_already_like(self, user):
+        for i in self.users_liked:
+            if i.get_id() == user.get_id():
+                return i
+
+        return None
 
 # rich text event listener: it will automatically be invoked whenever
 # the body field on any instance of the class is set to a new value
@@ -447,3 +494,40 @@ class Comment(db.Model):
             tags=allowed_tags, strip=True))
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+
+"""
+    GROUP Class
+"""
+
+class Group(db.Model):
+    __tablename__ = 'groups'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    description = db.Column(db.Text)
+    admin_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    public = db.Column(db.Boolean)
+    posts = db.relationship('Post', backref='group', lazy='dynamic')
+
+    users_joined = db.relationship('User', secondary=user_group_relationship, backref='ref_users_joined')
+
+    # join functions
+    def user_join(self, user):
+        if not self.has_already_join(user):
+            self.users_joined.append(user)
+            db.session.add(self)
+            db.session.commit()
+
+
+    def user_leave(self, user):
+        l = self.has_already_join(user)
+
+        if l:
+            self.users_joined.remove(l)
+            db.session.add(self)
+            db.session.commit()
+
+
+    def has_already_join(self, user):
+        for i in self.users_joined:
+            if i.get_id() == user.get_id():
+                return i
